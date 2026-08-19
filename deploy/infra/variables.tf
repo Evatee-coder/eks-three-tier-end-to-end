@@ -8,7 +8,7 @@ variable "environment" {
 variable "project" {
   description = "The project name"
   type        = string
-  default     = "eks-terraform-two-tier-app"
+  default     = "eks-terraform-three-tier-app"
 
 }
 
@@ -37,7 +37,7 @@ variable "subnet_cidrs" {
   description = "List of CIDR blocks for the subnets"
   type        = map(list(string))
   default = {
-    private_subnets = ["10.0.3.0/24", "10.0.4.0/24"]
+    private_subnets = ["10.0.3.0/24", "10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
     public_subnets  = ["10.0.1.0/24", "10.0.2.0/24"]
     # private_subnets = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
     # public_subnets  = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]

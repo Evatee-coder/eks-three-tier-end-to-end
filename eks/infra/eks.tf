@@ -2,7 +2,7 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 21.5.0"
 
-  name               = "eks-terraform-two-tier-app" #"${var.project}-${var.environment}-ekspart5"
+  name               = "eks-three-tier-end-to-end" #"${var.project}-${var.environment}-ekspart5"
   kubernetes_version = "1.31"
 
   addons = {
@@ -41,6 +41,6 @@ module "eks" {
   tags = {
     #Environment = "dev"
     Terraform = "true"
-    repo      = "eks-terraform-two-tier-app"
+    repo      = "eks-three-tier-end-to-end"
   }
 }

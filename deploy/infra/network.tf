@@ -11,7 +11,7 @@ module "vpc" {
 
   # for two azs
   azs             = ["${var.aws_region}a", "${var.aws_region}b"]
-  private_subnets = [var.subnet_cidrs["private_subnets"][0], var.subnet_cidrs["private_subnets"][1]]
+  private_subnets = [var.subnet_cidrs["private_subnets"][0], var.subnet_cidrs["private_subnets"][1], var.subnet_cidrs["private_subnets"][2], var.subnet_cidrs["private_subnets"][3]]
   public_subnets  = [var.subnet_cidrs["public_subnets"][0], var.subnet_cidrs["public_subnets"][1]]
 
   enable_nat_gateway = true
