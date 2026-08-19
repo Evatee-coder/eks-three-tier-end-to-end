@@ -50,9 +50,10 @@ resource "aws_iam_role" "github_actions_build" {
         Condition = {
           StringEquals = {
             "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
-          }
-          StringLike = {
-            "token.actions.githubusercontent.com:sub" = "repo:Evatee-coder/eks-three-tier-end-to-end:ref:refs/heads/main"
+            # GitHub's immutable subject claim format (repos created after 2026-07-15
+            # embed the permanent owner_id/repo_id, so this is an exact, stable match -
+            # confirmed against the actual denied CloudTrail AssumeRoleWithWebIdentity events).
+            "token.actions.githubusercontent.com:sub" = "repo:Evatee-coder@70039845/eks-three-tier-end-to-end@1337927724:ref:refs/heads/main"
           }
         }
       }
