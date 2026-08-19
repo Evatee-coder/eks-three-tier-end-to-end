@@ -1,0 +1,100 @@
+DBInstance:
+  AllocatedStorage: 20
+  AssociatedRoles: []
+  AutoMinorVersionUpgrade: true
+  AvailabilityZone: us-east-1a
+  BackupRetentionPeriod: 1
+  BackupTarget: region
+  CACertificateIdentifier: ''
+  CopyTagsToSnapshot: true
+  CustomerOwnedIpEnabled: false
+  DBInstanceArn: arn:aws:rds:us-east-1:216989097838:db:student-portal
+  DBInstanceClass: db.t4g.micro
+  DBInstanceIdentifier: student-portal
+  DBInstanceStatus: deleting
+  DBParameterGroups:
+  - DBParameterGroupName: default.postgres16
+    ParameterApplyStatus: in-sync
+  DBSecurityGroups: []
+  DBSubnetGroup:
+    DBSubnetGroupDescription: Created from the RDS Management Console
+    DBSubnetGroupName: default-vpc-0a82389121c2a0b3c
+    SubnetGroupStatus: Complete
+    Subnets:
+    - SubnetAvailabilityZone:
+        Name: us-east-1a
+      SubnetIdentifier: subnet-0dbd6e16827346b81
+      SubnetOutpost: {}
+      SubnetStatus: Active
+    - SubnetAvailabilityZone:
+        Name: us-east-1e
+      SubnetIdentifier: subnet-09da0e619c65d10da
+      SubnetOutpost: {}
+      SubnetStatus: Active
+    - SubnetAvailabilityZone:
+        Name: us-east-1b
+      SubnetIdentifier: subnet-003389915017f077e
+      SubnetOutpost: {}
+      SubnetStatus: Active
+    - SubnetAvailabilityZone:
+        Name: us-east-1d
+      SubnetIdentifier: subnet-032923322805b930b
+      SubnetOutpost: {}
+      SubnetStatus: Active
+    - SubnetAvailabilityZone:
+        Name: us-east-1b
+      SubnetIdentifier: subnet-04cd0d812fe188eab
+      SubnetOutpost: {}
+      SubnetStatus: Active
+    - SubnetAvailabilityZone:
+        Name: us-east-1c
+      SubnetIdentifier: subnet-0aae88954abb41c0d
+      SubnetOutpost: {}
+      SubnetStatus: Active
+    - SubnetAvailabilityZone:
+        Name: us-east-1f
+      SubnetIdentifier: subnet-04626494df5505f9a
+      SubnetOutpost: {}
+      SubnetStatus: Active
+    VpcId: vpc-0a82389121c2a0b3c
+  DatabaseInsightsMode: standard
+  DbInstancePort: 0
+  DbiResourceId: db-OD3KSZ6YM7DXQDIPL4WOUT2BVY
+  DedicatedLogVolume: false
+  DeletionProtection: false
+  DomainMemberships: []
+  Endpoint:
+    Address: student-portal.cgh22wq6k3xy.us-east-1.rds.amazonaws.com
+    HostedZoneId: Z2R2ITUGPM61AM
+    Port: 5432
+  Engine: postgres
+  EngineLifecycleSupport: open-source-rds-extended-support-disabled
+  EngineVersion: '16.8'
+  IAMDatabaseAuthenticationEnabled: false
+  InstanceCreateTime: '2025-12-27T06:02:11.576000+00:00'
+  KmsKeyId: arn:aws:kms:us-east-1:216989097838:key/54baf244-8782-48e7-b7de-cfbc94131650
+  LatestRestorableTime: '2026-04-01T19:49:37+00:00'
+  LicenseModel: postgresql-license
+  MasterUsername: myadmin
+  MaxAllocatedStorage: 1000
+  MonitoringInterval: 0
+  MultiAZ: false
+  NetworkType: IPV4
+  OptionGroupMemberships:
+  - OptionGroupName: default:postgres-16
+    Status: in-sync
+  PendingModifiedValues: {}
+  PerformanceInsightsEnabled: true
+  PerformanceInsightsKMSKeyId: arn:aws:kms:us-east-1:216989097838:key/54baf244-8782-48e7-b7de-cfbc94131650
+  PerformanceInsightsRetentionPeriod: 7
+  PreferredBackupWindow: 10:10-10:40
+  PreferredMaintenanceWindow: wed:05:12-wed:05:42
+  PubliclyAccessible: true
+  ReadReplicaDBInstanceIdentifiers: []
+  StorageEncrypted: true
+  StorageThroughput: 0
+  StorageType: gp2
+  TagList: []
+  VpcSecurityGroups:
+  - Status: active
+    VpcSecurityGroupId: sg-03f2168e2991b7173
