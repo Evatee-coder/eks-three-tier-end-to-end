@@ -1,21 +1,20 @@
- # 2 private subnet for database
 resource "aws_subnet" "rds_1" {
-  cidr_block        = "10.0.7.0/24"
+  cidr_block        = "10.0.5.0/24"
   availability_zone = "us-east-1a"
   vpc_id            = data.aws_eks_cluster.eks.vpc_config[0]["vpc_id"]
 
   tags = {
-    Name = "RDS Private Subnet 1"
+    Name = "RDS Private Subnet 1 (active)"
   }
 }
 
 resource "aws_subnet" "rds_2" {
-  cidr_block        = "10.0.8.0/24"
+  cidr_block        = "10.0.6.0/24"
   availability_zone = "us-east-1b"
   vpc_id            = data.aws_eks_cluster.eks.vpc_config[0]["vpc_id"]
 
   tags = {
-    Name = "RDS Private Subnet 2"
+    Name = "RDS Private Subnet 2 (standby)"
   }
 }
 
@@ -25,21 +24,15 @@ resource "aws_security_group" "rds" {
   description = "allow inbound access from the EKS only"
 
   ingress {
-    description     = "Postgres access from EKS cluster"
-    protocol        = "tcp"
-    from_port       = 5432
-    to_port         = 5432
-    #security_groups = data.aws_eks_cluster.eks.vpc_config[0]["security_group_ids"]
-    #cidr_blocks = ["0.0.0.0/0"]
-    # security_groups = concat(
-    #   [data.aws_eks_cluster.eks.vpc_config[0]["cluster_security_group_id"]],
-    #   tolist(data.aws_eks_cluster.eks.vpc_config[0]["security_group_ids"])
-    # )
+    description = "Postgres access from EKS cluster"
+    protocol    = "tcp"
+    from_port   = 5432
+    to_port     = 5432
     security_groups = concat(
-        [data.aws_eks_cluster.eks.vpc_config[0]["cluster_security_group_id"]],
-        tolist(data.aws_eks_cluster.eks.vpc_config[0]["security_group_ids"]),
-        [data.aws_security_group.eks_node.id]
-      )
+      [data.aws_eks_cluster.eks.vpc_config[0]["cluster_security_group_id"]],
+      tolist(data.aws_eks_cluster.eks.vpc_config[0]["security_group_ids"]),
+      [data.aws_security_group.eks_node.id]
+    )
   }
 
   egress {
@@ -51,7 +44,16 @@ resource "aws_security_group" "rds" {
 }
 
 resource "aws_db_instance" "postgres" {
-  identifier            = "${var.project}-${var.environment}-${var.app_name}"
+  # WRONG (transient): db_subnet_group_name references the now create_before_destroy
+  # subnet group above, so Terraform requires this instance to also become
+  # create_before_destroy when it's replaced (dependency graph rule: a resource
+  # can't be destroyed while a not-yet-created dependent still needs it). That
+  # means Terraform tries to CREATE the new instance before destroying the old
+  # one - and identifier was a static, unchanged value, so it collided with the
+  # still-live old instance (DBInstanceAlreadyExists). Suffixing it avoids the
+  # collision; matches the subnet group's "-v2" naming.
+  # identifier          = "${var.project}-${var.environment}-${var.app_name}"
+  identifier            = "${var.project}-${var.environment}-${var.app_name}-v2"
   allocated_storage     = var.db_default_settings.allocated_storage
   max_allocated_storage = var.db_default_settings.max_allocated_storage
   engine                = "postgres"
@@ -61,12 +63,13 @@ resource "aws_db_instance" "postgres" {
   password              = random_password.rds_password.result
   port                  = 5432
   publicly_accessible   = false
+  availability_zone     = "us-east-1a"
   db_subnet_group_name  = aws_db_subnet_group.postgres.id
-  ca_cert_identifier    = var.db_default_settings.ca_cert_name
-  storage_encrypted     = true
-  storage_type          = "gp3"
-  kms_key_id            = aws_kms_key.env_kms.arn
-  skip_final_snapshot   = true
+  ca_cert_identifier   = var.db_default_settings.ca_cert_name
+  storage_encrypted    = true
+  storage_type         = "gp3"
+  kms_key_id           = aws_kms_key.env_kms.arn
+  skip_final_snapshot  = true
   vpc_security_group_ids = [
     aws_security_group.rds.id
   ]
@@ -114,14 +117,16 @@ resource "aws_secretsmanager_secret_version" "dbs_secret_val" {
 }
 
 resource "aws_db_subnet_group" "postgres" {
-  name        =  "${var.project}-${var.environment}-${var.app_name}"
-  description = "Subnet group for RDS instance"
+  name        = "${var.project}-${var.environment}-${var.app_name}-v2"
+  description = "Subnet group for RDS instance (subnets 5 & 6)"
   subnet_ids = [
     aws_subnet.rds_1.id,
     aws_subnet.rds_2.id
   ]
-  # subnet_ids =["subnet-0f42a1b9efaf4e602", "subnet-0395e32fc16981198"]
 
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_kms_key" "env_kms" {
@@ -129,7 +134,7 @@ resource "aws_kms_key" "env_kms" {
   deletion_window_in_days = 7
 
   tags = {
-    Name        =  "${var.project}-${var.environment}-db"
+    Name        = "${var.project}-${var.environment}-db"
     Environment = var.environment
   }
 }

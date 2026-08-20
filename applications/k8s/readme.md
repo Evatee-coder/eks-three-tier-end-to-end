@@ -24,7 +24,7 @@ kubectl run debug-pod --rm -it --image=postgres -- bash
 # db test
 
 ## commands that enables me to connect to my db
-## from config ---> secrets----> I got the db url postgresql://postgres:MzKn6ShpLl@devopsquiz-dev-devopsdojo.cgh22wq6k3xy.us-east-1.rds.amazonaws.com:5432/postgres
+## from config ---> secrets----> I got the db url postgresql://postgres:password@devopsquiz-dev-devopsdojo.cgh22wq6k3xy.us-east-1.rds.amazonaws.com:5432/postgres
 hostname after @ to com: devopsquiz-dev-devopsdojo.cgh22wq6k3xy.us-east-1.rds.amazonaws.com
 psql -h Host
 
