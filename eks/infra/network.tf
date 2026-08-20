@@ -30,13 +30,13 @@ module "vpc" {
 
   # The tags below will allow kubernetes cluster to find those public subnets to create those load balancer 
   public_subnet_tags = {
-    "kubernetes.io/cluster/eks-terraform-two-tier-app" = "shared"
+    "kubernetes.io/cluster/eks-three-tier-end-to-end" = "shared"
     "kubernetes.io/role/elb"                           = "1"
   }
 
   # Required tags for EKS cluster subnet discovery
   private_subnet_tags = {
-    "kubernetes.io/cluster/eks-terraform-two-tier-app" = "shared"
+    "kubernetes.io/cluster/eks-three-tier-end-to-end" = "shared"
     "kubernetes.io/role/internal-elb"                  = "1"
   }
 
