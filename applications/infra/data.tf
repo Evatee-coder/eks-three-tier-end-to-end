@@ -1,3 +1,13 @@
+ # EKS Node Security Group
+ data "aws_security_group" "eks_node" {
+    filter {
+      name   = "tag:Name"
+      values = ["eks-three-tier-end-to-end-node"]
+    }
+  }
+
+
+
 data "aws_eks_cluster" "eks" {
   name = "eks-three-tier-end-to-end"
 }

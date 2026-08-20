@@ -25,11 +25,21 @@ resource "aws_security_group" "rds" {
   description = "allow inbound access from the EKS only"
 
   ingress {
+    description     = "Postgres access from EKS cluster"
     protocol        = "tcp"
     from_port       = 5432
     to_port         = 5432
-    security_groups = data.aws_eks_cluster.eks.vpc_config[0]["security_group_ids"]
+    #security_groups = data.aws_eks_cluster.eks.vpc_config[0]["security_group_ids"]
     #cidr_blocks = ["0.0.0.0/0"]
+    # security_groups = concat(
+    #   [data.aws_eks_cluster.eks.vpc_config[0]["cluster_security_group_id"]],
+    #   tolist(data.aws_eks_cluster.eks.vpc_config[0]["security_group_ids"])
+    # )
+    security_groups = concat(
+        [data.aws_eks_cluster.eks.vpc_config[0]["cluster_security_group_id"]],
+        tolist(data.aws_eks_cluster.eks.vpc_config[0]["security_group_ids"]),
+        [data.aws_security_group.eks_node.id]
+      )
   }
 
   egress {
